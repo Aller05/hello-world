@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            border:0;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+<script src="js/konva.js"></script>
+<script>
+    function PieChart(option){
+        this._init(option);
+    }
+    PieChart.prototype = {
+        constructor:PieChart,
+        _init:function(option){
+            option = option || {};
+            this.x = option.x || 0;
+            this.y = option.y || 0;
+            this.innerRadius = option.innerRadius || 100;
+            this.outerRadius = option.outerRadius || 100;
+            this.outerColor = option.outerColor || 'red';
+            this.outerWidth = option.outerWidth || 5;
+            this.dataArr = option.dataArr || [];
+            this.animationIndex = 0;
+        },
+        render:function(layer){
+            var self = this;
+            //总组
+            this.group = new Konva.Group({
+                x:0,
+                y:0
+            });
+            layer.add(this.group);
+            //饼组
+            this.pieGroup = new Konva.Group({
+                x:0,
+                y:0
+            });
+            this.group.add(this.pieGroup);
+            //数据组
+            this.numGroup = new Konva.Group({
+                x:0,
+                y:0
+            });
+            this.group.add(this.numGroup);
+            //右侧城市矩形组
+            this.cityGroup = new Konva.Group({
+                x:0,
+                y:0
+            });
+            this.group.add(this.cityGroup);
+
+            //1绘制外侧圆
+            var outerCircle = new Konva.Circle({
+                x:this.x,
+                y:this.y,
+                radius:this.outerRadius,
+                stroke:this.outerColor,
+                strokeWidth:this.outerWidth
+            });
+            this.group.add(outerCircle);
+
+            //2绘制扇形区
+            var beginAngle = -90;
+            this.dataArr.forEach(function(item,index){
+                var wedge = new Konva.Wedge({
+                    x:self.x,
+                    y:self.y,
+                    radius:self.innerRadius,
+                    //每个扇形的角度
+                    angle:item.value * 360,
+                    //每个扇形需要旋转的角度,其实也就是起始角度
+                    rotation:beginAngle,
+                    fill:item.color
+                });
+                self.pieGroup.add(wedge);
+
+                //3绘制数据区域
+                //求出每个数据的角度
+                var sAngle = beginAngle + item.value * 360 / 2;
+                var sX = self.x + (self.innerRadius + 40) * Math.cos(sAngle * Math.PI/180);
+                var sY = self.y + (self.innerRadius + 40) * Math.sin(sAngle * Math.PI/180);
+                if(sAngle>90 && sAngle<270 ){
+                    sX = sX-55;
+                    sY = sY-10
+                }
+                var text = new Konva.Text({
+                    x:sX,
+                    y:sY,
+                    text:item.value + '%',
+                    fill:item.color,
+                    fontSize:22,
+                    fontFamily:'微软雅黑'
+                });
+                self.numGroup.add(text);
+
+                //4绘制城市矩形组
+                var cityRect = new Konva.Rect({
+                    x:self.x + self.outerRadius*2,
+                    y:self.y + index * 30,
+                    width:60,
+                    height:20,
+                    fill:item.color
+                });
+                self.cityGroup.add(cityRect);
+
+                var cityText = new Konva.Text({
+                    x:self.x + self.outerRadius*2 + 70,
+                    y:self.y + index * 30,
+                    text:item.name,
+                    fontSize:18,
+                    fontFamily:'微软雅黑',
+                    fill:item.color
+                });
+                self.cityGroup.add(cityText);
+
+                beginAngle +=item.value * 360;
+            })
+        },
+        playAnimation:function(){
+            var self = this;
+            if(this.animationIndex == 0){
+                this.pieGroup.getChildren().each(function(item){
+                    item.angle(0);
+                })
+            }
+            var wedge = this.pieGroup.getChildren()[this.animationIndex];
+            wedge.to({
+                angle:this.dataArr[this.animationIndex].value * 360,
+                duration:this.dataArr[this.animationIndex].value,
+                onFinish:function(){
+                    self.animationIndex++;
+                    if(self.animationIndex >= self.dataArr.length){
+                        self.animationIndex = 0;
+                        return;
+                    }
+                    self.playAnimation();
+                }
+            });
+        }
+
+    }
+
+</script>
+<script>
+    var stage = new Konva.Stage({
+        width:window.innerWidth,
+        height:window.innerHeight,
+        container:'container'
+    });
+    var layer = new Konva.Layer({});
+    stage.add(layer);
+
+    var dataArr = [
+        {name:'北京',color:'yellow',value:0.3},
+        {name:'广州',color:'blue',value:0.05},
+        {name:'上海',color:'pink',value:0.2},
+        {name:'杭州',color:'purple',value:0.15},
+        {name:'天津',color:'green',value:0.2},
+        {name:'深圳',color:'red',value:0.1}
+    ];
+
+    var pieChart = new PieChart({
+        x:1/2 * stage.width(),
+        y:1/2 * stage.height(),
+        innerRadius:160,
+        outerRadius:180,
+        outerColor:'#ccc',
+        outerWidth:10,
+        dataArr:dataArr
+    });
+
+    pieChart.render(layer);
+
+    layer.draw();
+
+    stage.on('contentClick',function(){
+        pieChart.playAnimation();
+    })
+
+</script>
+</body>
+</html>
