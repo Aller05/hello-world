@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/index.css">
+    <script src="js/jsonP.js"></script>
+    <script>
+        window.onload = function () {
+            var oInput = document.getElementById('text');
+            var oUl = document.getElementById('ul');
+            oInput.onkeyup = function () {
+                var content = oInput.value;
+                //此处跨域地址为百度的搜索框自动提示
+                var url = 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su';
+                //调用跨域方法
+                JsonP(url,'cb',{'wd':content},
+                    function (json) {
+                        //每次输入内容后清空之前的提示内容
+                        oUl.innerHTML = '';
+                        for (var i = 0; i < json.s.length; i++) {
+                            var oLi = document.createElement('li');
+                            oLi.innerHTML = json.s[i];
+                            oUl.appendChild(oLi);
+                        }
+                    }
+                );
+            };
+            //监听提示列表点击
+            oUl.onmousemove = function () {
+                var lis = document.getElementsByTagName('li');
+                for (var i = 0; i < lis.length; i++) {
+                    lis[i].onmousedown = function () {
+                        oInput.value = this.innerHTML;
+                    }
+                }
+            };
+            //当输入框失去焦点时,清空ul列表
+            oInput.onblur = function () {
+                oUl.innerHTML = '';
+            };
+        }
+    </script>
+</head>
+<body>
+<div class="box">
+    <form action="https://www.baidu.com/s" method="get">
+        <input type="text" id="text" placeholder="请输入搜索内容" name="wd"><button id="btn">百度一下</button>
+    </form>
+    <ul id="ul"></ul>
+</div>
+</body>
+</html>
