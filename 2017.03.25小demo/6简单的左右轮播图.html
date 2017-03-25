@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        div{
+            width: 640px;
+            height: 270px;
+            border: 1px solid #000;
+            margin: 100px auto;
+            position: relative;
+            overflow: hidden;
+        }
+        div ul{
+            width: 600%;
+            height: 270px;
+            position: absolute;
+            top: 0;
+        }
+        div ul li{
+            float: left;
+        }
+        div ul li img{
+            vertical-align: middle;
+        }
+        div span{
+            display:block ;
+            width: 30px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, .7);
+            text-align: center;
+            line-height: 60px;
+            font-size: 32px;
+            color: #CCCCCC;
+            position: absolute;
+            top: 50%;
+            margin-top: -30px;
+            cursor: pointer;
+            user-select: none;
+        }
+        div span:last-child{
+            right: 0;
+        }
+        div span:hover{
+            background-color: #57bcff;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var oUl = document.getElementById('oul');
+            var oLeft = document.getElementsByTagName('span')[0];
+            var oRight = document.getElementsByTagName('span')[1];
+            var timer = null;
+            var loop = 0;
+            var num = 0;
+            var flag = false;
+
+            oLeft.onclick = function(){
+                if(flag){
+                    return;
+                }
+                flag = true;
+                loop++;
+                if(loop>5){
+                    loop = 1;
+                    num=0;
+                    oUl.style.left = 0;
+                }
+                timer = setInterval(function(){
+                    console.log(num);
+                    num += (-loop*640-num)*0.2;
+                    oUl.style.left = num + 'px';
+                    if(Math.round(num)<=-loop*640){
+                        num=-loop*640;
+                        clearInterval(timer);
+                        flag = false;
+                    }
+                },1000/60);
+            };
+            oRight.onclick = function(){
+                if(flag){
+                    return;
+                }
+                flag = true;
+                loop--;
+                if(loop<0){
+                    loop = 4;
+                    num = -5*640;
+                    oUl.style.left = num+'px';
+
+                }
+                timer = setInterval(function(){
+                    console.log(num);
+                    num += (-loop*640-num)*0.2;
+                    oUl.style.left = num + 'px';
+                    if(Math.round(num)==-loop*640){
+                        num=-loop*640;
+                        clearInterval(timer);
+                        flag = false;
+                    }
+                },1000/60);
+            };
+
+
+        }
+    </script>
+</head>
+<body>
+<div>
+    <ul id="oul">
+        <li><img src="image/scan/01.jpg" alt=""></li>
+        <li><img src="image/scan/02.jpg" alt=""></li>
+        <li><img src="image/scan/03.jpg" alt=""></li>
+        <li><img src="image/scan/04.jpg" alt=""></li>
+        <li><img src="image/scan/05.jpg" alt=""></li>
+        <li><img src="image/scan/01.jpg" alt=""></li>
+    </ul>
+    <span>&lt;</span>
+    <span>&gt;</span>
+</div>
+</body>
+</html>

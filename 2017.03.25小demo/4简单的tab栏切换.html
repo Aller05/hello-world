@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .all{
+            width: 300px;
+            height: 300px;
+            margin: 200px auto;
+            border: 1px solid #000;
+            text-align: center;
+        }
+        .all .top button{
+            width: 40px;
+            height: 20px;
+            background-color: red;
+        }
+        .all .bottom div{
+            width: 300px;
+            height: 250px;
+            background-color: #57bcff;
+            margin-top: 20px;
+        }
+        .all .top .cur{
+            background: blue;
+        }
+
+    </style>
+    <script>
+        window.onload = function () {
+            var aBtn = document.querySelectorAll('button');
+            var aBox = document.getElementById('bottom').getElementsByTagName('div');
+            for (var i = 0; i < aBtn.length; i++) {
+                (function (i) {
+                    aBtn[i].onmousemove = function () {
+                        for (var j = 0; j < aBox.length; j++) {
+                            aBox[j].style.display = 'none';
+                            aBtn[j].className = '';
+                        }
+                        this.className = 'cur';
+                        aBox[i].style.display = 'block';
+                    }
+                })(i);
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="all">
+    <div class="top">
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>4</button>
+        <button>5</button>
+    </div>
+    <div class="bottom" id="bottom">
+        <div>第1个</div>
+        <div>第2个</div>
+        <div>第3个</div>
+        <div>第4个</div>
+        <div>第5个</div>
+    </div>
+</div>
+</body>
+</html>

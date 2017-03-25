@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        div{
+            width: 500px;
+            height: 400px;
+            margin: 50px auto;
+            overflow: hidden;
+            position: relative;
+        }
+        div img{
+            height: 400px;
+            position: absolute;
+            top: 0;
+        }
+        div span{
+            width: 250px;
+            height: 400px;
+            position: absolute;
+            top: 0;
+        }
+        div span:first-child{
+            left: 0;
+        }
+        div span:last-child{
+            right: 0;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var oImg = document.getElementById('img');
+            var aSpan = document.querySelectorAll('span');
+            var w = oImg.offsetWidth;//909
+            var timer1,timer2 = null;
+            var num = 0;
+
+            aSpan[0].onmouseover = function () {
+                timer1 = setInterval(function () {
+                    console.log(num);
+                    num += ((500-w) + num) *0.02;
+                    oImg.style.left = num + 'px';
+                    if(num<=(500-w)){
+                        clearInterval(timer1);
+                        num = 500-w;
+                    }
+                },1000/60)
+            };
+            aSpan[1].onmouseover = function () {
+                timer2 = setInterval(function () {
+                    console.log(num);
+                    num += (0 - num) * 0.02;
+                    oImg.style.left = num + 'px';
+                    if(num>=-1){
+                        clearInterval(timer2);
+                        num = 0;
+                    }
+                },1000/60)
+            }
+
+
+
+
+        }
+    </script>
+</head>
+<body>
+<div>
+    <img src="image/111.jpg" id="img">
+    <span></span>
+    <span></span>
+</div>
+</body>
+</html>
