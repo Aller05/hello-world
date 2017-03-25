@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .main{
+            width: 800px;
+            height: auto;
+            border: 1px solid #000;
+            position: relative;
+
+        }
+        .box{
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            float: left;
+
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var btn = document.getElementsByTagName('button');
+            var box = document.querySelectorAll('.box');
+
+            for (var i = 0; i < btn.length; i++) {
+                btn[i].index = i;
+                btn[i].onclick = function () {
+
+                    for (var j = 0; j < box.length; j++) {
+                        var row = parseInt(j / (this.index+3));
+                        var col = parseInt(j % (this.index+3));
+                        box[j].style.position = 'absolute';
+                        box[j].style.left = col * (box[0].offsetWidth + 10) + 'px';
+                        box[j].style.top = row * (box[0].offsetWidth + 50) + 'px';
+                        
+                    }
+                }
+                
+            }
+        }
+    </script>
+</head>
+<body>
+<button>每行三个</button>
+<button>每行四个</button>
+<button>每行五个</button>
+<div class="main">
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+    <div class="box"></div>
+</div>
+</body>
+</html>
