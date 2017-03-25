@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导航切换</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        body{
+            background: #000;
+        }
+        nav{
+            width: 800px;
+            height: 50px;
+            background: #fff;
+            position: relative;
+            z-index:999999;
+        }
+        li{
+            float: left;
+            text-align: center;
+            width:100px;
+            line-height:50px;
+
+        }
+        span{
+            position: absolute;
+            left:0;
+            top:0;
+            width: 100px;
+            height: 50px;
+            background: url(image/bgtab.gif);
+            z-index: 1;
+        }
+        ul{
+            width: 800px;
+            height: 50px;
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+    <script>
+        //缺陷是定时器会一直开着,但是代码简单容易理解
+        // 下面是加了判断,定时器可以关闭的.
+       /* window.onload = function () {
+            var aLi = document.getElementsByTagName('li');
+            var oSpan = document.getElementById('oSpan');
+            var oNav = document.getElementById('nav');
+            var begin = 0,end=0,num = 0;
+
+            for (var i = 0; i < aLi.length; i++) {
+                aLi[i].onmouseover = function () {
+                    end = this.offsetLeft;
+                };
+                aLi[i].onclick = function () {
+                    num = this.offsetLeft;
+                };
+                oNav.onmouseout = function () {
+                    end = num;
+                };
+            }
+
+            var timer = setInterval(function(){
+                begin += (end - begin)*0.1;
+                oSpan.style.left = begin + 'px';
+            }, 1000 / 60);
+
+        };*/
+    </script>
+    <script>
+        window.onload = function () {
+            var aLi = document.getElementsByTagName('li');
+            var oSpan = document.getElementById('oSpan');
+            var oNav = document.getElementById('nav');
+            var begin = 0,end=0,num = 0;
+            var timer = null;
+
+            for (var i = 0; i < aLi.length; i++) {
+                aLi[i].onmouseover = function () {
+                    clearInterval(timer);
+                    end = this.offsetLeft;
+                    move();
+                };
+                aLi[i].onclick = function () {
+                    num = this.offsetLeft;
+                };
+                oNav.onmouseout = function () {
+                    clearInterval(timer);
+                    end = num;
+                    move();
+                };
+            }
+
+            function move() {
+                timer = setInterval(function(){
+                    begin += (end - begin)*0.1;
+                    oSpan.style.left = begin + 'px';
+                    if(Math.round(begin) == end){
+                        begin = end;
+                        clearInterval(timer);
+                    }
+                    console.log(1);
+                }, 1000 / 60);
+            }
+        };
+    </script>
+</head>
+<body>
+<nav id="nav">
+    <ul id="oul">
+        <li>首页新闻</li>
+        <li>师资力量</li>
+        <li>活动策划</li>
+        <li>企业文化</li>
+        <li>招聘信息</li>
+        <li>公司介绍</li>
+        <li>广州校区</li>
+        <li>北京校区</li>
+    </ul>
+    <span id="oSpan">
+
+    </span>
+</nav>
+</body>
+</html>
