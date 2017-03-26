@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    //一.统计一个字符串中相同字符出现的次数
+    (function(){
+        //解法1:
+        var str = 'abbcdacda';
+        //1用空字符分隔字符串为数组
+        var strArr = str.split('');
+        //2声明一个空对象用来记录数据
+        var count = {};
+        for (var i = 0; i < strArr.length; i++) {
+            //3取出数组中每个元素,当做count的属性,并初始化值为0,即对比前出现的次数为0
+            var s = strArr[i];
+            count[s] = 0;
+            for (var j = 0; j < strArr.length; j++) {
+                //4对比时如果有相同值出现,次数+1
+                if(s == strArr[j]){
+                    count[s]++
+                }
+            }
+        }
+        for(var key in count){
+            console.log(key+'出现了'+count[key]+'次');
+        }
+        //解法2,利用reduce,超级简单.
+        //思路:将字符串分隔为数组,第二个 参数传入空对象,将callback中第二个参数,也就是每一个字符串
+        //当做key存储为空对象的属性,第一次运算a = {};返回值的逗号是当做运算符,最后一次运算结束后
+        //返回return的括号里最后一个值,也就是把a对象返回
+        var info = str.split('').reduce(function(a,b){
+           return (a[b]++ || (a[b]=1) , a);
+        },{});
+        for(var key in info){
+            console.log(''+key+'出现了'+info[key]+'次');
+        }
+
+    })();
+    
+    //二.将一个二维或多维数组扁平化
+    (function () {
+        //解法1:复杂的二维数组,包含数字和字符串
+        var arrTwo = [[1,2],3,'abc',[3,4,4],[5,6]];
+        //①普通笨解法
+        //1首先定义一个空字符串
+        var str = '';
+        for (var i = 0; i < arrTwo.length; i++) {
+            //如果是数组,用|拼接为字符串再与空字符串拼接,头部添加|是为了保存完整的字符串
+            //如果不是数组,直接和空字符串拼接
+            Array.isArray(arrTwo[i]) ? str += ('|'+arrTwo[i].join('|')) : str += ('|'+arrTwo[i]);
+
+        }
+        //2.拼接完成的字符串,从索引1开始截取,因为第一个是|;然后再转化为数组.
+        console.log(str.slice(1).split('|'));
+
+        //解法2:多维数组
+        //①普通解法
+//        var arrMore = [[1,2],[3,4],[5,6]];
+        var arrMore = [1,[2,[3,[4,[5,[6,[7,[8,[9,[10]]]]]]]]]];
+        var curArr = [];
+
+        for (var j = 0; j < arrMore.length; j++) {
+            Array.isArray(arrMore[j]) ? flatte(arrMore[j],curArr) : curArr.push(arrMore[j]);
+        }
+
+        function flatte(arr,cur) {
+            for (var i = 0; i < arr.length; i++) {
+                Array.isArray(arr[i]) ? flatte(arr[i],cur) : cur.push(arr[i]);
+            }
+        }
+        console.log(curArr);
+
+
+        //②reduce方法
+        function flatteReduce(arr) {
+            return arr.reduce(function (acc, val) {
+                return acc.concat(Array.isArray(val) ? flatteReduce(val) : val)
+            },[]);
+        }
+        console.log(flatteReduce(arrMore));
+    })();
+
+</script>
+<script>
+    
+   
+    
+</script>
+</body>
+</html>
