@@ -6,6 +6,13 @@
 </head>
 <body>
 <script>
+    //因为下面要用到很多isArray方法,该原生方法为ES5推出,所以处理下兼容
+    if(typeof Array.isArray != 'function'){
+        Array.isArray = function (obj) {
+            return Object.prototype.call.toString(obj) == '[object Array]';
+        }
+    }
+
     //一.统计一个字符串中相同字符出现的次数
     (function(){
         //解法1:
@@ -62,18 +69,18 @@
 //        var arrMore = [[1,2],[3,4],[5,6]];
         var arrMore = [1,[2,[3,[4,[5,[6,[7,[8,[9,[10]]]]]]]]]];
         var curArr = [];
-
+        //1循环遍历数组,取出的每个子元素判断是否为数组,如果是数组,继续调用该方法
         for (var j = 0; j < arrMore.length; j++) {
             Array.isArray(arrMore[j]) ? flatte(arrMore[j],curArr) : curArr.push(arrMore[j]);
         }
-
+        //2.flatte方法传入两个参数,第一个参数为操作的数组,第二个为需要push进的数组
         function flatte(arr,cur) {
             for (var i = 0; i < arr.length; i++) {
+
                 Array.isArray(arr[i]) ? flatte(arr[i],cur) : cur.push(arr[i]);
             }
         }
         console.log(curArr);
-
 
         //②reduce方法
         function flatteReduce(arr) {
@@ -82,6 +89,7 @@
             },[]);
         }
         console.log(flatteReduce(arrMore));
+        //reduce方法明显简单很多,但是需要搞明白它的原理.
     })();
 
 </script>
