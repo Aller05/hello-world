@@ -1,0 +1,24 @@
+<div ng-show="isLoad"><img src="img/loading.gif"></div>
+<div ng-hide="isLoad">
+    <h1 ng-bind="name"></h1>
+    <div class="list">
+        <a href="#!/movie/subject/{{movie.id}}" ng-repeat="movie in movieList" >
+            <dl>
+                <dt><img ng-src="{{movie.images.small}}" ></dt>
+                <dd>
+                    <h4 ng-bind="movie.title"></h4>
+                    <p>类型: <span ng-bind="movie.genres.join('、')"></span></p>
+                    <p>导演: <span ng-repeat="dir in movie.directors" ng-bind="dir.name"></span></p>
+                    <p>主演: <span ng-repeat="cas in movie.casts" ng-bind="cas.name + ($last ? '' : '、')"></span></p>
+                </dd>
+                <span class="score" ng-bind="movie.rating.average">42分</span>
+            </dl>
+        </a>
+    </div>
+
+    <div class="page">
+        <span ng-bind="num +'/'+ countPage"></span>
+        <a href="javascript:" ng-show="isPrePage" ng-click="loadPage('prePage')">上一页</a>
+        <a href="javascript:" ng-show="isNextPage" ng-click="loadPage('nextPage')">下一页</a>
+    </div>
+</div>

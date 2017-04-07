@@ -1,0 +1,19 @@
+<div ng-show="isLoad"><img src="img/loading.gif"></div>
+<div ng-hide="isLoad">
+    <h1 ng-bind="movieDetail.title"></h1>
+    <div class="detail_content">
+        <dl class="detail_dl">
+            <dt><img ng-src="{{movieDetail.images.large}}" width="300px" height="400px"></dt>
+            <dd>
+                <h4 ng-bind="movieDetail.title">电影标题</h4>
+                <p>类型: <span ng-bind="movieDetail.genres.join('、')"></span></p>
+                <p>导演: <span ng-repeat="dir in movieDetail.directors" ng-bind="dir.name"></span></p>
+                <p>主演: <span ng-repeat="cas in movieDetail.casts" ng-bind="cas.name+($last? '':'、')"></span></p>
+                <p>评分: <span ng-bind="movieDetail.rating.average"></span></p>
+                <p>年代: <span ng-bind="movieDetail.year"></span></p>
+
+            </dd>
+        </dl>
+    </div>
+    <div ng-bind="movieDetail.summary"></div>
+</div>
